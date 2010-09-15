@@ -35,6 +35,7 @@ import com.elbenj.email.service.IEmailService;
 
 import android.accounts.AccountManager;
 import android.app.ListActivity;
+import android.appwidget.AppWidgetManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -68,9 +69,12 @@ import android.widget.AdapterView.OnItemClickListener;
 public class MailboxList extends ListActivity implements OnItemClickListener, OnClickListener {
 
     // Intent extras (internal to this activity)
-    private static final String EXTRA_ACCOUNT_ID = "com.elbenj.email.activity._ACCOUNT_ID";
 
-    private static final String MAILBOX_SELECTION = MailboxColumns.ACCOUNT_KEY + "=?"
+    private static final String EXTRA_ACCOUNT_ID = "com.elbenj.email.activity._ACCOUNT_ID";
+    private static final String EXTRA_SHORTCUT_URI = "shortcut_uri";
+
+
+    public static final String MAILBOX_SELECTION = MailboxColumns.ACCOUNT_KEY + "=?"
         + " AND " + MailboxColumns.TYPE + "<" + Mailbox.TYPE_NOT_EMAIL
         + " AND " + MailboxColumns.FLAG_VISIBLE + "=1";
     private static final String MAILBOX_SELECTION_ALL = MailboxColumns.ACCOUNT_KEY + "=?"
@@ -133,9 +137,8 @@ public class MailboxList extends ListActivity implements OnItemClickListener, On
         ((Button) findViewById(R.id.account_title_button)).setOnClickListener(this);
 
         mAccountId = getIntent().getLongExtra(EXTRA_ACCOUNT_ID, -1);
-
         lmbTask();
-        }
+    }
 
     // broke this out of onCreate so I could re-run the task when show all mailboxes was set
 
@@ -166,7 +169,7 @@ public class MailboxList extends ListActivity implements OnItemClickListener, On
                 int nAccounts = EmailContent.count(MailboxList.this, Account.CONTENT_URI, null, null);
                 return new Object[] {accountName, nAccounts};
             }
- 
+
             @Override
             protected void onPostExecute(Object[] result) {
                 if (result == null) {
@@ -189,7 +192,8 @@ public class MailboxList extends ListActivity implements OnItemClickListener, On
     @Override
     public void onPause() {
         super.onPause();
-        Controller.getInstance(getApplication()).removeResultCallback(mControllerCallback);
+        Controller controller = Controller.getInstance(getApplication());
+        controller.removeResultCallback(mControllerCallback);
     }
 
     @Override
@@ -219,7 +223,6 @@ public class MailboxList extends ListActivity implements OnItemClickListener, On
         mLoadAccountNameTask = null;
         Utility.cancelTaskInterrupt(mMessageCountTask);
         mMessageCountTask = null;
-
         mListAdapter.changeCursor(null);
     }
 

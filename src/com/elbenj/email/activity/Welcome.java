@@ -23,6 +23,8 @@ import com.elbenj.email.activity.setup.AccountSetupBasics;
 import com.elbenj.email.provider.EmailContent;
 import com.elbenj.email.provider.EmailContent.Mailbox;
 
+import com.elbenj.email.provider.EmailContent.Account;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -92,7 +94,11 @@ public class Welcome extends Activity {
                 case 1:
                     c.moveToFirst();
                     long accountId = c.getLong(EmailContent.Account.CONTENT_ID_COLUMN);
-                    MessageList.actionHandleAccount(this, accountId, Mailbox.TYPE_INBOX);
+                    Account account = Account.restoreAccountWithId(this, accountId);
+                    if (0 == (account.getFlags() & Account.FLAGS_DEFAULT_FOLDER_LIST))
+                        MessageList.actionHandleAccount(this, accountId, Mailbox.TYPE_INBOX);
+                    else
+                        MailboxList.actionHandleAccount(this, accountId);
                     break;
                 default:
                     AccountFolderList.actionShowAccounts(this);
