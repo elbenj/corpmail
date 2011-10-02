@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.transport;
+package com.elbenj.email.mail.transport;
 
-import com.android.email.R;
-import com.android.email.mail.MessagingException;
-import com.android.email.provider.EmailProvider;
-import com.android.email.provider.EmailContent.Attachment;
-import com.android.email.provider.EmailContent.Message;
+import com.elbenj.email.R;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.provider.EmailProvider;
+import com.elbenj.email.provider.EmailContent.Attachment;
+import com.elbenj.email.provider.EmailContent.Message;
 
 import org.apache.james.mime4j.field.Field;
 import org.apache.james.mime4j.message.Body;
@@ -42,7 +42,7 @@ import java.util.List;
  * Tests of the Rfc822Output (used for sending mail)
  *
  * You can run this entire test case with:
- *   runtest -c com.android.email.mail.transport.Rfc822OutputTests email
+ *   runtest -c com.elbenj.email.mail.transport.Rfc822OutputTests email
  */
 public class Rfc822OutputTests extends ProviderTestCase2<EmailProvider> {
     private static final String SENDER = "sender@android.com";

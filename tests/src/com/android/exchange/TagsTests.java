@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.android.exchange;
+package com.elbenj.exchange;
 
-import com.android.exchange.adapter.Tags;
+import com.elbenj.exchange.adapter.Tags;
 
 import android.test.AndroidTestCase;
 

@@ -20,13 +20,13 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 # EXCHANGE-REMOVE-SECTION-START
 LOCAL_SRC_FILES += \
-    src/com/android/email/service/IEmailService.aidl \
-    src/com/android/email/service/IEmailServiceCallback.aidl
+    src/com/elbenj/email/service/IEmailService.aidl \
+    src/com/elbenj/email/service/IEmailServiceCallback.aidl
 # EXCHANGE-REMOVE-SECTION-END
 
 LOCAL_JAVA_STATIC_LIBRARIES := android-common
 
-LOCAL_PACKAGE_NAME := Email
+LOCAL_PACKAGE_NAME := Corpmail
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
@@ -35,13 +35,13 @@ LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 # leaving out code which is tested by other means (e.g. static libraries) that
 # would dilute the coverage results. These options do not affect regular
 # production builds.
-LOCAL_EMMA_COVERAGE_FILTER := +com.android.email.*,+org.apache.james.mime4j.* \
+LOCAL_EMMA_COVERAGE_FILTER := +com.elbenj.email.*,+org.apache.james.mime4j.* \
 	+com.beetstra.jutf7.*,+org.apache.commons.io.*
 # EXCHANGE-REMOVE-SECTION-START
-LOCAL_EMMA_COVERAGE_FILTER += +com.android.exchange.*
+LOCAL_EMMA_COVERAGE_FILTER += +com.elbenj.exchange.*
 # EXCHANGE-REMOVE-SECTION-END
 
 include $(BUILD_PACKAGE)
 
 # additionally, build unit tests in a separate .apk
-include $(call all-makefiles-under,$(LOCAL_PATH))
+# include $(call all-makefiles-under,$(LOCAL_PATH))

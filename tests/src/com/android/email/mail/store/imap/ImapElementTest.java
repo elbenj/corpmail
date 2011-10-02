@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.store.imap;
+package com.elbenj.email.mail.store.imap;
 
-import com.android.email.mail.store.imap.ImapElement;
+import com.elbenj.email.mail.store.imap.ImapElement;
 
 import android.test.suitebuilder.annotation.SmallTest;
 

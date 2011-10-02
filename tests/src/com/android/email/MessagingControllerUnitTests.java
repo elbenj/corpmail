@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.android.email;
+package com.elbenj.email;
 
-import com.android.email.mail.MockFolder;
-import com.android.email.provider.EmailContent;
+import com.elbenj.email.mail.MockFolder;
+import com.elbenj.email.provider.EmailContent;
 
 import android.content.ContentUris;
 import android.net.Uri;

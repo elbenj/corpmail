@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.exchange;
+package com.elbenj.exchange;
 
 import android.content.Context;
 import android.content.ContextWrapper;

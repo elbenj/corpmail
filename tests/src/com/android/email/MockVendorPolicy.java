@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.email;
+package com.elbenj.email;
 
 import android.content.Context;
 import android.os.Bundle;

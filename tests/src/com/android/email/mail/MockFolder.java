@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.email.mail;
+package com.elbenj.email.mail;
 
 public class MockFolder extends Folder {
 

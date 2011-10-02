@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.android.exchange.adapter;
+package com.elbenj.exchange.adapter;
 
-import com.android.email.provider.EmailProvider;
-import com.android.email.provider.EmailContent.Account;
-import com.android.email.provider.EmailContent.Mailbox;
-import com.android.exchange.EasSyncService;
-import com.android.exchange.adapter.EmailSyncAdapter.EasEmailSyncParser;
+import com.elbenj.email.provider.EmailProvider;
+import com.elbenj.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.Mailbox;
+import com.elbenj.exchange.EasSyncService;
+import com.elbenj.exchange.adapter.EmailSyncAdapter.EasEmailSyncParser;
 
 import android.content.ContentResolver;
 import android.content.Context;

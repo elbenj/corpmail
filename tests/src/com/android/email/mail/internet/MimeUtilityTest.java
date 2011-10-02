@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.internet;
+package com.elbenj.email.mail.internet;
 
-import com.android.email.mail.BodyPart;
-import com.android.email.mail.MessageTestUtils;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.Part;
-import com.android.email.mail.MessageTestUtils.MessageBuilder;
-import com.android.email.mail.MessageTestUtils.MultipartBuilder;
+import com.elbenj.email.mail.BodyPart;
+import com.elbenj.email.mail.MessageTestUtils;
+import com.elbenj.email.mail.Message;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.Part;
+import com.elbenj.email.mail.MessageTestUtils.MessageBuilder;
+import com.elbenj.email.mail.MessageTestUtils.MultipartBuilder;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

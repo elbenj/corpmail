@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.android.email;
+package com.elbenj.email;
 
-import com.android.email.provider.EmailContent.Mailbox;
+import com.elbenj.email.provider.EmailContent.Mailbox;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-package com.android.exchange;
+package com.elbenj.exchange;
 
-import com.android.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.Account;
 
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpPost;
@@ -31,7 +31,7 @@ import java.io.IOException;
 
 /**
  * You can run this entire test case with:
- * runtest -c com.android.exchange.EasSyncServiceTests email
+ * runtest -c com.elbenj.exchange.EasSyncServiceTests email
  */
  public class EasSyncServiceTests extends AndroidTestCase {
     Context mMockContext;

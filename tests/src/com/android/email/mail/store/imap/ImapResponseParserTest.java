@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.store.imap;
+package com.elbenj.email.mail.store.imap;
 
-import static com.android.email.mail.store.imap.ImapTestUtils.assertElement;
-import static com.android.email.mail.store.imap.ImapTestUtils.buildList;
-import static com.android.email.mail.store.imap.ImapTestUtils.buildResponse;
-import static com.android.email.mail.store.imap.ImapTestUtils.createFixedLengthInputStream;
+import static com.elbenj.email.mail.store.imap.ImapTestUtils.assertElement;
+import static com.elbenj.email.mail.store.imap.ImapTestUtils.buildList;
+import static com.elbenj.email.mail.store.imap.ImapTestUtils.buildResponse;
+import static com.elbenj.email.mail.store.imap.ImapTestUtils.createFixedLengthInputStream;
 
-import com.android.email.Email;
-import com.android.email.Utility;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.store.imap.ImapMemoryLiteral;
-import com.android.email.mail.store.imap.ImapResponse;
-import com.android.email.mail.store.imap.ImapResponseParser;
-import com.android.email.mail.store.imap.ImapSimpleString;
-import com.android.email.mail.store.imap.ImapString;
-import com.android.email.mail.store.imap.ImapTempFileLiteral;
-import com.android.email.mail.store.imap.ImapResponseParser.ByeException;
-import com.android.email.mail.transport.DiscourseLogger;
+import com.elbenj.email.Email;
+import com.elbenj.email.Utility;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.store.imap.ImapMemoryLiteral;
+import com.elbenj.email.mail.store.imap.ImapResponse;
+import com.elbenj.email.mail.store.imap.ImapResponseParser;
+import com.elbenj.email.mail.store.imap.ImapSimpleString;
+import com.elbenj.email.mail.store.imap.ImapString;
+import com.elbenj.email.mail.store.imap.ImapTempFileLiteral;
+import com.elbenj.email.mail.store.imap.ImapResponseParser.ByeException;
+import com.elbenj.email.mail.transport.DiscourseLogger;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;

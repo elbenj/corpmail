@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.store;
+package com.elbenj.email.mail.store;
 
-import com.android.email.Email;
-import com.android.email.mail.Address;
-import com.android.email.mail.Body;
-import com.android.email.mail.FetchProfile;
-import com.android.email.mail.Flag;
-import com.android.email.mail.Folder;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessageTestUtils;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.Part;
-import com.android.email.mail.Store;
-import com.android.email.mail.Folder.FolderType;
-import com.android.email.mail.Folder.OpenMode;
-import com.android.email.mail.Message.RecipientType;
-import com.android.email.mail.MessageTestUtils.MultipartBuilder;
-import com.android.email.mail.internet.MimeMessage;
-import com.android.email.mail.internet.MimeUtility;
-import com.android.email.mail.internet.TextBody;
-import com.android.email.mail.store.LocalStore.LocalMessage;
+import com.elbenj.email.Email;
+import com.elbenj.email.mail.Address;
+import com.elbenj.email.mail.Body;
+import com.elbenj.email.mail.FetchProfile;
+import com.elbenj.email.mail.Flag;
+import com.elbenj.email.mail.Folder;
+import com.elbenj.email.mail.Message;
+import com.elbenj.email.mail.MessageTestUtils;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.Part;
+import com.elbenj.email.mail.Store;
+import com.elbenj.email.mail.Folder.FolderType;
+import com.elbenj.email.mail.Folder.OpenMode;
+import com.elbenj.email.mail.Message.RecipientType;
+import com.elbenj.email.mail.MessageTestUtils.MultipartBuilder;
+import com.elbenj.email.mail.internet.MimeMessage;
+import com.elbenj.email.mail.internet.MimeUtility;
+import com.elbenj.email.mail.internet.TextBody;
+import com.elbenj.email.mail.store.LocalStore.LocalMessage;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -55,7 +55,7 @@ import java.util.HashSet;
 @MediumTest
 public class LocalStoreUnitTests extends AndroidTestCase {
     
-    public static final String DB_NAME = "com.android.email.mail.store.LocalStoreUnitTests.db";
+    public static final String DB_NAME = "com.elbenj.email.mail.store.LocalStoreUnitTests.db";
 
     private static final String SENDER = "sender@android.com";
     private static final String RECIPIENT_TO = "recipient-to@android.com";

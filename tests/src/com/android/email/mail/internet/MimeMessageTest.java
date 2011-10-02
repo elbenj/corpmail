@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.internet;
+package com.elbenj.email.mail.internet;
 
-import com.android.email.Email;
-import com.android.email.mail.Address;
-import com.android.email.mail.Flag;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.Message.RecipientType;
+import com.elbenj.email.Email;
+import com.elbenj.email.mail.Address;
+import com.elbenj.email.mail.Flag;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.Message.RecipientType;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -530,7 +530,7 @@ public class MimeMessageTest extends AndroidTestCase {
      * Make sure the parser accepts the "eBay style" date format.
      *
      * Messages from ebay have been seen that they use the wrong date format.
-     * @see com.android.email.Utility#cleanUpMimeDate
+     * @see com.elbenj.email.Utility#cleanUpMimeDate
      */
     public void testEbayDate() throws MessagingException, IOException {
         String entireMessage =

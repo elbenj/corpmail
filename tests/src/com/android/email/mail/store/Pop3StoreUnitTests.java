@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.store;
+package com.elbenj.email.mail.store;
 
-import com.android.email.Email;
-import com.android.email.mail.Address;
-import com.android.email.mail.FetchProfile;
-import com.android.email.mail.Flag;
-import com.android.email.mail.Folder;
-import com.android.email.mail.Folder.FolderType;
-import com.android.email.mail.Folder.OpenMode;
-import com.android.email.mail.Message;
-import com.android.email.mail.Message.RecipientType;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.Transport;
-import com.android.email.mail.internet.MimeMessage;
-import com.android.email.mail.transport.MockTransport;
+import com.elbenj.email.Email;
+import com.elbenj.email.mail.Address;
+import com.elbenj.email.mail.FetchProfile;
+import com.elbenj.email.mail.Flag;
+import com.elbenj.email.mail.Folder;
+import com.elbenj.email.mail.Folder.FolderType;
+import com.elbenj.email.mail.Folder.OpenMode;
+import com.elbenj.email.mail.Message;
+import com.elbenj.email.mail.Message.RecipientType;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.Transport;
+import com.elbenj.email.mail.internet.MimeMessage;
+import com.elbenj.email.mail.transport.MockTransport;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;

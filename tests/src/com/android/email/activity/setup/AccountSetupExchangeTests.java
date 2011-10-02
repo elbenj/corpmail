@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.android.email.activity.setup;
+package com.elbenj.email.activity.setup;
 
-import com.android.email.R;
-import com.android.email.provider.EmailContent;
-import com.android.email.provider.ProviderTestUtils;
-import com.android.email.provider.EmailContent.Account;
-import com.android.email.provider.EmailContent.HostAuth;
+import com.elbenj.email.R;
+import com.elbenj.email.provider.EmailContent;
+import com.elbenj.email.provider.ProviderTestUtils;
+import com.elbenj.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.HostAuth;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.android.email.provider;
+package com.elbenj.email.provider;
 
-import com.android.email.provider.EmailContent.Account;
-import com.android.email.provider.EmailContent.AccountColumns;
-import com.android.email.provider.EmailContent.Attachment;
-import com.android.email.provider.EmailContent.AttachmentColumns;
-import com.android.email.provider.EmailContent.Body;
-import com.android.email.provider.EmailContent.BodyColumns;
-import com.android.email.provider.EmailContent.HostAuth;
-import com.android.email.provider.EmailContent.Mailbox;
-import com.android.email.provider.EmailContent.MailboxColumns;
-import com.android.email.provider.EmailContent.Message;
-import com.android.email.provider.EmailContent.MessageColumns;
+import com.elbenj.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.AccountColumns;
+import com.elbenj.email.provider.EmailContent.Attachment;
+import com.elbenj.email.provider.EmailContent.AttachmentColumns;
+import com.elbenj.email.provider.EmailContent.Body;
+import com.elbenj.email.provider.EmailContent.BodyColumns;
+import com.elbenj.email.provider.EmailContent.HostAuth;
+import com.elbenj.email.provider.EmailContent.Mailbox;
+import com.elbenj.email.provider.EmailContent.MailboxColumns;
+import com.elbenj.email.provider.EmailContent.Message;
+import com.elbenj.email.provider.EmailContent.MessageColumns;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -48,7 +48,7 @@ import java.util.ArrayList;
  * Tests of the Email provider.
  *
  * You can run this entire test case with:
- *   runtest -c com.android.email.provider.ProviderTests email
+ *   runtest -c com.elbenj.email.provider.ProviderTests email
  */
 public class ProviderTests extends ProviderTestCase2<EmailProvider> {
 

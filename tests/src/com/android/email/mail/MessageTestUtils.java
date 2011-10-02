@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.android.email.mail;
+package com.elbenj.email.mail;
 
-import com.android.email.mail.internet.BinaryTempFileBody;
-import com.android.email.mail.internet.MimeBodyPart;
-import com.android.email.mail.internet.MimeHeader;
-import com.android.email.mail.internet.MimeMessage;
-import com.android.email.mail.internet.MimeMultipart;
-import com.android.email.mail.internet.TextBody;
-import com.android.email.mail.store.LocalStore;
-import com.android.email.provider.AttachmentProvider;
-import com.android.email.provider.EmailContent;
+import com.elbenj.email.mail.internet.BinaryTempFileBody;
+import com.elbenj.email.mail.internet.MimeBodyPart;
+import com.elbenj.email.mail.internet.MimeHeader;
+import com.elbenj.email.mail.internet.MimeMessage;
+import com.elbenj.email.mail.internet.MimeMultipart;
+import com.elbenj.email.mail.internet.TextBody;
+import com.elbenj.email.mail.store.LocalStore;
+import com.elbenj.email.provider.AttachmentProvider;
+import com.elbenj.email.provider.EmailContent;
 
 import android.net.Uri;
 

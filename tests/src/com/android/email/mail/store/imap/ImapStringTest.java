@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.store.imap;
+package com.elbenj.email.mail.store.imap;
 
-import static com.android.email.mail.store.imap.ImapTestUtils.*;
+import static com.elbenj.email.mail.store.imap.ImapTestUtils.*;
 
-import com.android.email.Email;
-import com.android.email.Utility;
-import com.android.email.mail.store.imap.ImapMemoryLiteral;
-import com.android.email.mail.store.imap.ImapSimpleString;
-import com.android.email.mail.store.imap.ImapString;
-import com.android.email.mail.store.imap.ImapTempFileLiteral;
+import com.elbenj.email.Email;
+import com.elbenj.email.Utility;
+import com.elbenj.email.mail.store.imap.ImapMemoryLiteral;
+import com.elbenj.email.mail.store.imap.ImapSimpleString;
+import com.elbenj.email.mail.store.imap.ImapString;
+import com.elbenj.email.mail.store.imap.ImapTempFileLiteral;
 
 import org.apache.commons.io.IOUtils;
 

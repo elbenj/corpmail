@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-package com.android.exchange;
+package com.elbenj.exchange;
 
-import com.android.email.AccountTestCase;
-import com.android.email.Email;
-import com.android.email.provider.EmailContent;
-import com.android.email.provider.EmailProvider;
-import com.android.email.provider.ProviderTestUtils;
-import com.android.email.provider.EmailContent.Account;
-import com.android.email.provider.EmailContent.Mailbox;
-import com.android.exchange.SyncManager.SyncError;
+import com.elbenj.email.AccountTestCase;
+import com.elbenj.email.Email;
+import com.elbenj.email.provider.EmailContent;
+import com.elbenj.email.provider.EmailProvider;
+import com.elbenj.email.provider.ProviderTestUtils;
+import com.elbenj.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.Mailbox;
+import com.elbenj.exchange.SyncManager.SyncError;
 
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
@@ -35,7 +35,7 @@ import java.util.HashMap;
 
 /**
  * You can run this entire test case with:
- *   runtest -c com.android.exchange.SyncManagerAccountTests email
+ *   runtest -c com.elbenj.exchange.SyncManagerAccountTests email
  */
 public class SyncManagerAccountTests extends AccountTestCase {
 

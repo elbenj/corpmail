@@ -53,7 +53,7 @@ public class DateTimeField extends Field {
             Date date = null;
             ParseException parseException = null;
             //BEGIN android-changed
-            body = com.android.email.Utility.cleanUpMimeDate(body);
+            body = com.elbenj.email.Utility.cleanUpMimeDate(body);
             //END android-changed
             try {
                 date = DateTime.parse(body).getDate();

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.transport;
+package com.elbenj.email.mail.transport;
 
-import com.android.email.mail.Address;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.Transport;
-import com.android.email.provider.EmailProvider;
-import com.android.email.provider.EmailContent.Attachment;
-import com.android.email.provider.EmailContent.Body;
-import com.android.email.provider.EmailContent.Message;
+import com.elbenj.email.mail.Address;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.Transport;
+import com.elbenj.email.provider.EmailProvider;
+import com.elbenj.email.provider.EmailContent.Attachment;
+import com.elbenj.email.provider.EmailContent.Body;
+import com.elbenj.email.provider.EmailContent.Message;
 
 import org.apache.commons.io.IOUtils;
 
@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  * complete - no server(s) required.
  *
  * These tests can be run with the following command:
- *   runtest -c com.android.email.mail.transport.SmtpSenderUnitTests email
+ *   runtest -c com.elbenj.email.mail.transport.SmtpSenderUnitTests email
  */
 @SmallTest
 public class SmtpSenderUnitTests extends ProviderTestCase2<EmailProvider> {
@@ -307,7 +307,7 @@ public class SmtpSenderUnitTests extends ProviderTestCase2<EmailProvider> {
         attachment.mMimeType = "image/jpg";
         attachment.mSize = 0;
         attachment.mContentId = null;
-        attachment.mContentUri = "content://com.android.email/1/1";
+        attachment.mContentUri = "content://com.elbenj.email/1/1";
         attachment.mMessageKey = messageId;
         attachment.mLocation = null;
         attachment.mEncoding = null;

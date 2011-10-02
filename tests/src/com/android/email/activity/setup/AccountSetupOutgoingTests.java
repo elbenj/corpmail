@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.android.email.activity.setup;
+package com.elbenj.email.activity.setup;
 
-import com.android.email.R;
-import com.android.email.provider.EmailContent;
+import com.elbenj.email.R;
+import com.elbenj.email.provider.EmailContent;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;

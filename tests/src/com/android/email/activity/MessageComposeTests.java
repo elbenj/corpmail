@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.android.email.activity;
+package com.elbenj.email.activity;
 
-import com.android.email.Email;
-import com.android.email.EmailAddressValidator;
-import com.android.email.R;
-import com.android.email.mail.Address;
-import com.android.email.mail.MessagingException;
-import com.android.email.provider.EmailContent.Account;
-import com.android.email.provider.EmailContent.Message;
+import com.elbenj.email.Email;
+import com.elbenj.email.EmailAddressValidator;
+import com.elbenj.email.R;
+import com.elbenj.email.mail.Address;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.Message;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -42,7 +42,7 @@ import android.widget.MultiAutoCompleteTextView;
  * It might be possible to convert these to ActivityUnitTest, which would be faster.
  *
  * You can run this entire test case with:
- *   runtest -c com.android.email.activity.MessageComposeTests email
+ *   runtest -c com.elbenj.email.activity.MessageComposeTests email
  */
 @LargeTest
 public class MessageComposeTests
@@ -102,10 +102,10 @@ public class MessageComposeTests
     private static final String UTF32_BODY = "\uD834\uDF01\uD834\uDF46";
 
     /** Note - these are copied from private strings in MessageCompose.  Make them package? */
-    private static final String ACTION_REPLY = "com.android.email.intent.action.REPLY";
-    private static final String ACTION_REPLY_ALL = "com.android.email.intent.action.REPLY_ALL";
-    private static final String ACTION_FORWARD = "com.android.email.intent.action.FORWARD";
-    private static final String ACTION_EDIT_DRAFT = "com.android.email.intent.action.EDIT_DRAFT";
+    private static final String ACTION_REPLY = "com.elbenj.email.intent.action.REPLY";
+    private static final String ACTION_REPLY_ALL = "com.elbenj.email.intent.action.REPLY_ALL";
+    private static final String ACTION_FORWARD = "com.elbenj.email.intent.action.FORWARD";
+    private static final String ACTION_EDIT_DRAFT = "com.elbenj.email.intent.action.EDIT_DRAFT";
 
     public MessageComposeTests() {
         super(MessageCompose.class);

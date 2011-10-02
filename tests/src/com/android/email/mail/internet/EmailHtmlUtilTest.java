@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.android.email.mail.internet;
+package com.elbenj.email.mail.internet;
 
-import com.android.email.Email;
-import com.android.email.mail.Message;
-import com.android.email.mail.MessageTestUtils;
-import com.android.email.mail.MessagingException;
-import com.android.email.mail.MessageTestUtils.MessageBuilder;
-import com.android.email.mail.MessageTestUtils.MultipartBuilder;
-import com.android.email.mail.MessageTestUtils.TextBuilder;
-import com.android.email.mail.store.LocalStore;
-import com.android.email.provider.EmailContent;
-import com.android.email.provider.EmailContent.Account;
+import com.elbenj.email.Email;
+import com.elbenj.email.mail.Message;
+import com.elbenj.email.mail.MessageTestUtils;
+import com.elbenj.email.mail.MessagingException;
+import com.elbenj.email.mail.MessageTestUtils.MessageBuilder;
+import com.elbenj.email.mail.MessageTestUtils.MultipartBuilder;
+import com.elbenj.email.mail.MessageTestUtils.TextBuilder;
+import com.elbenj.email.mail.store.LocalStore;
+import com.elbenj.email.provider.EmailContent;
+import com.elbenj.email.provider.EmailContent.Account;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -39,7 +39,7 @@ import java.io.IOException;
  * Tests of the Email HTML utils.
  * 
  * You can run this entire test case with:
- *   runtest -c com.android.email.mail.internet.EmailHtmlUtilTest email
+ *   runtest -c com.elbenj.email.mail.internet.EmailHtmlUtilTest email
  */
 @MediumTest
 public class EmailHtmlUtilTest extends AndroidTestCase {

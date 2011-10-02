@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.android.email.provider;
+package com.elbenj.email.provider;
 
-import com.android.email.Utility;
-import com.android.email.provider.EmailContent.Account;
-import com.android.email.provider.EmailContent.Attachment;
-import com.android.email.provider.EmailContent.HostAuth;
-import com.android.email.provider.EmailContent.Mailbox;
-import com.android.email.provider.EmailContent.Message;
+import com.elbenj.email.Utility;
+import com.elbenj.email.provider.EmailContent.Account;
+import com.elbenj.email.provider.EmailContent.Attachment;
+import com.elbenj.email.provider.EmailContent.HostAuth;
+import com.elbenj.email.provider.EmailContent.Mailbox;
+import com.elbenj.email.provider.EmailContent.Message;
 
 import android.content.Context;
 import android.test.MoreAsserts;

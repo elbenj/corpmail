@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.android.email;
+package com.elbenj.email;
 
-import com.android.email.provider.EmailContent;
-import com.android.email.provider.EmailProvider;
-import com.android.email.provider.ProviderTestUtils;
+import com.elbenj.email.provider.EmailContent;
+import com.elbenj.email.provider.EmailProvider;
+import com.elbenj.email.provider.ProviderTestUtils;
 
 import android.content.Context;
 import android.database.Cursor;
