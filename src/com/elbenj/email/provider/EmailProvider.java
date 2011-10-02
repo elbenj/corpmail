@@ -55,8 +55,8 @@ public class EmailProvider extends ContentProvider {
 
     private static final String TAG = "EmailProvider";
 
-    protected static final String DATABASE_NAME = "EmailProvider.db";
-    protected static final String BODY_DATABASE_NAME = "EmailProviderBody.db";
+    protected static final String DATABASE_NAME = "CorpmailProvider.db";
+    protected static final String BODY_DATABASE_NAME = "CorpmailProviderBody.db";
 
     public static final Uri INTEGRITY_CHECK_URI =
         Uri.parse("content://" + EmailContent.AUTHORITY + "/integrityCheck");
