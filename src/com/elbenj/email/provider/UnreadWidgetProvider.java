@@ -23,8 +23,8 @@ public class UnreadWidgetProvider extends AppWidgetProvider {
 
     public static String PREF_PREFIX = "email_unread_widget_";
     public static String UNREAD_WIDGET_UPDATE = "unread_widget_update";
-    static final ComponentName UNREAD_PROVIDER = new ComponentName("com.android.email",
-                "com.android.email.provider.UnreadWidgetProvider");
+    static final ComponentName UNREAD_PROVIDER = new ComponentName("com.elbenj.email",
+                "com.elbenj.email.provider.UnreadWidgetProvider");
 
     public static AppWidgetManager mAppWidgetManager;
     public static int unreadCount = 0;

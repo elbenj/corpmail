@@ -273,7 +273,7 @@
         </receiver>
 
         <service
-            android:name="com.android.email.provider.UnreadWidgetProvider$UpdateWidgetService">
+            android:name="com.elbenj.email.provider.UnreadWidgetProvider$UpdateWidgetService">
         </service>
 
         <!--EXCHANGE-REMOVE-SECTION-START-->

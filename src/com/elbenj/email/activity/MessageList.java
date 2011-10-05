@@ -35,6 +35,7 @@ import com.elbenj.email.provider.EmailContent.Message;
 import com.elbenj.email.provider.EmailContent.MessageColumns;
 import com.elbenj.email.service.MailService;
 import com.elbenj.email.service.IEmailService;
+import com.elbenj.email.provider.EmailContent.HostAuth;
 
 import com.android.internal.util.ArrayUtils;
 
@@ -841,6 +842,7 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
                 if (which == DialogInterface.BUTTON_NEGATIVE)
                     return;
                 targetFolderId = mFolderId.get(which);
+                Log.d("MIKE","MOVE_________targetfolderid = " + Long.toString(targetFolderId));
                 mController.moveMessage(moveMessageId, moveAccountId, targetFolderId);
                 Toast.makeText(MessageList.this, getResources().getQuantityString(
                         R.plurals.message_moved_toast, 1), Toast.LENGTH_SHORT).show();

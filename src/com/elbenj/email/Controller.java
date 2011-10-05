@@ -965,7 +965,6 @@ public class Controller {
             return false;
         }
         String scheme = info.mScheme;
-
         return ("pop3".equals(scheme) || "imap".equals(scheme));
     }
 
