@@ -101,7 +101,7 @@ public class UnreadWidgetProvider extends AppWidgetProvider {
                     R.layout.unread_widget);
             if (unreadCount > 0) {
                 views.setTextViewText(R.id.unread_count, Integer.toString(unreadCount));
-                views.setTextColor(R.id.unread_count, Color.BLACK);
+                views.setTextColor(R.id.unread_count, Color.WHITE);
                 views.setViewVisibility(R.id.unread_count, View.VISIBLE);
             } else {
                 views.setViewVisibility(R.id.unread_count, View.GONE);

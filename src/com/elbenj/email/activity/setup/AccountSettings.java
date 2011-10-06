@@ -430,8 +430,8 @@ public class AccountSettings extends PreferenceActivity {
         int newFlags = mAccount.getFlags() &
                 ~(Account.FLAGS_NOTIFY_NEW_MAIL | Account.FLAGS_VIBRATE_ALWAYS |
                         Account.FLAGS_VIBRATE_WHEN_SILENT | Account.FLAGS_MSG_LIST_ON_DELETE |
-                        Account.FLAGS_CONFIRM_ON_DELETE | Account.FLAGS_CONFIRM_ON_SEND) |
-                        Account.FLAGS_DEFAULT_FOLDER_LIST | Account.FLAGS_SIGNATURE_TOGGLE;
+                        Account.FLAGS_CONFIRM_ON_DELETE | Account.FLAGS_CONFIRM_ON_SEND |
+                        Account.FLAGS_DEFAULT_FOLDER_LIST | Account.FLAGS_SIGNATURE_TOGGLE);
         mAccount.setDefaultAccount(mAccountDefault.isChecked());
         mAccount.setDisplayName(mAccountDescription.getText());
         mAccount.setSenderName(mAccountName.getText());

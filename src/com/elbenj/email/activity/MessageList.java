@@ -325,7 +325,7 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         mMoveButton.setOnClickListener(this);
 
         ((Button) findViewById(R.id.account_title_button)).setOnClickListener(this);
-
+        ((Button) findViewById(R.id.title_left_text)).setOnClickListener(this);
         mListView.setOnItemClickListener(this);
         mListView.setItemsCanFocus(false);
         registerForContextMenu(mListView);
@@ -507,6 +507,8 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
             case R.id.account_title_button:
                 onAccounts();
                 break;
+            case R.id.title_left_text:
+                onFolders();
         }
     }
 
@@ -610,11 +612,12 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
                 getMenuInflater().inflate(R.menu.message_list_context, menu);
                 // The default menu contains "mark as read".  If the message is read, change
                 // the menu text to "mark as unread."
-                if (itemView.mRead) {
+                if  (itemView.mRead) {
                     menu.findItem(R.id.mark_as_read).setTitle(R.string.mark_as_unread_action);
                 }
                 IEmailService sv = mController.getService(mAccountId);
-                if (mMailboxId < -1 || sv == null)
+//                if (mMailboxId < -1 || sv == null)
+                if (true)
                     menu.findItem(R.id.move).setVisible(false);
                 break;
         }
@@ -842,7 +845,6 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
                 if (which == DialogInterface.BUTTON_NEGATIVE)
                     return;
                 targetFolderId = mFolderId.get(which);
-                Log.d("MIKE","MOVE_________targetfolderid = " + Long.toString(targetFolderId));
                 mController.moveMessage(moveMessageId, moveAccountId, targetFolderId);
                 Toast.makeText(MessageList.this, getResources().getQuantityString(
                         R.plurals.message_moved_toast, 1), Toast.LENGTH_SHORT).show();
@@ -1092,7 +1094,8 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         if (mAccountId > 0) {
             Account acc = Account.restoreAccountWithId(mContext, mAccountId);
             acc.mHostAuthRecv = HostAuth.restoreHostAuthWithId(this, acc.mHostAuthKeyRecv);
-            if (mMailboxId >= -1 && "eas".equals(acc.mHostAuthRecv.mProtocol)) {
+       //     if (mMailboxId >= -1 && "eas".equals(acc.mHostAuthRecv.mProtocol)) {
+            if (false) {
                 mMoveButton.setVisibility(View.VISIBLE);
             } else {
                 mMoveButton.setVisibility(View.GONE);

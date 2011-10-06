@@ -9,7 +9,8 @@
         android:id="@+id/unread_count"
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content" 
-        android:textSize="35sp"
-        android:gravity="center"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        android:textColor="#ffffffff"
         android:visibility="invisible"/>
 </LinearLayout>
