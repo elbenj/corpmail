@@ -747,4 +747,5 @@ save attachment.</string>
     <string name="show_only_unread_combined_title">Show unread only</string>
     <string name="show_only_unread_combined_summary_on">Show only unread messages in Combined Inbox view</string>
     <string name="show_only_unread_combined_summary_off">Show all messages in Combined Inbox view</string>
+    <string name="search_button">Search</string>
 </resources>

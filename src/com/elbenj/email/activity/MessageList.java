@@ -60,6 +60,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -75,6 +77,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -120,10 +123,14 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
     private Button mFavoriteButton;
     private Button mDeleteButton;
     private Button mMoveButton;
+    private Button mSearchButton;
+    private Button mFolderTitle;
+    private Button mAccountTitle;
     private View mListFooterView;
     private TextView mListFooterText;
     private View mListFooterProgress;
     private TextView mErrorBanner;
+    private EditText mSearchBox;
 
     private static final int LIST_FOOTER_MODE_NONE = 0;
     private static final int LIST_FOOTER_MODE_REFRESH = 1;
@@ -185,6 +192,8 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
     private long prevMagicId;
     private boolean ranFolderListTask = false;
     public long mAccountId;
+    private String searchString = "";
+    private Boolean searchMode = false;
 
     /* package */ static final String[] MESSAGE_PROJECTION = new String[] {
         EmailContent.RECORD_ID, MessageColumns.MAILBOX_KEY, MessageColumns.ACCOUNT_KEY,
@@ -318,14 +327,17 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         mLeftTitle = (TextView) findViewById(R.id.title_left_text);
         mProgressIcon = (ProgressBar) findViewById(R.id.title_progress_icon);
         mErrorBanner = (TextView) findViewById(R.id.connection_error_text);
-
+        mSearchButton = (Button) findViewById(R.id.search_button);
+        mFolderTitle = (Button) findViewById(R.id.title_left_text);
+        mAccountTitle = (Button) findViewById(R.id.account_title_button);
+        mSearchBox = (EditText) findViewById(R.id.search_box);
         mReadUnreadButton.setOnClickListener(this);
         mFavoriteButton.setOnClickListener(this);
         mDeleteButton.setOnClickListener(this);
         mMoveButton.setOnClickListener(this);
-
-        ((Button) findViewById(R.id.account_title_button)).setOnClickListener(this);
-        ((Button) findViewById(R.id.title_left_text)).setOnClickListener(this);
+        mSearchButton.setOnClickListener(this);
+        mAccountTitle.setOnClickListener(this);
+        mFolderTitle.setOnClickListener(this);
         mListView.setOnItemClickListener(this);
         mListView.setItemsCanFocus(false);
         registerForContextMenu(mListView);
@@ -509,7 +521,46 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
                 break;
             case R.id.title_left_text:
                 onFolders();
+                break;
+            case R.id.search_button:
+                onSearch();
+                break;
         }
+    }
+
+    public void onSearch() {
+        mSearchButton.setVisibility(View.GONE);
+        mFolderTitle.setVisibility(View.GONE);
+        mAccountTitle.setVisibility(View.GONE);
+        mSearchBox.setVisibility(View.VISIBLE);
+        searchMode = true;
+        mSearchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                searchString = mSearchBox.getText().toString();
+                Log.d("MIKE","_____________________SEARCH STRING IS: "+searchString);
+                if (searchString.length() < 3) {
+                    return; // don't do anything until search string is long enough to be worthwhile
+                }
+                mLoadMessagesTask.cancel(true);
+                mLoadMessagesTask = new LoadMessagesTask(mMailboxId, -1);
+                mLoadMessagesTask.execute();
+            }
+        });
+        
+        
+        
     }
 
     public void onBackPressed() {
@@ -1439,9 +1490,20 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         protected Cursor doInBackground(Void... params) {
             String selection =
                 Utility.buildMailboxIdSelection(MessageList.this.mResolver, mMailboxKey, mContext);
-            Cursor c = MessageList.this.managedQuery(
-                    EmailContent.Message.CONTENT_URI, MESSAGE_PROJECTION,
-                    selection, null, EmailContent.MessageColumns.TIMESTAMP + " DESC");
+            if (searchMode) {
+                selection += " AND " + MessageColumns.DISPLAY_NAME + " LIKE '%" + searchString + "%'";
+            }
+            Log.d("MIKE","SELECTION IS: "+selection);
+            Cursor c;
+            if (searchMode) {
+                c = MessageList.this.managedQuery(
+                        EmailContent.Message.CONTENT_URI, MESSAGE_PROJECTION,
+                        selection, null, EmailContent.MessageColumns.TIMESTAMP + " DESC");
+            } else {
+                c = MessageList.this.managedQuery(
+                        EmailContent.Message.CONTENT_URI, MESSAGE_PROJECTION,
+                        selection, null, EmailContent.MessageColumns.TIMESTAMP + " DESC");
+            }
             if (isCancelled()) {
                 c.close();
                 c = null;
