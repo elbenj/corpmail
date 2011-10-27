@@ -751,5 +751,5 @@ save attachment.</string>
     <string name="search_hint_sender">Sender...</string>
     <string name="search_hint_subject">Subject...</string>
     <string name="search_hint_message">Message...</string>
-    <string name="search_done">Done</string>
+    <string name="search_done">Close</string>
 </resources>

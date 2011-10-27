@@ -850,7 +850,9 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
             if (mailbox != null) {
                 MailboxList.actionHandleAccount(this, mailbox.mAccountKey);
                 finish();
-            }
+            } 
+        } else {
+            onAccounts();
         }
     }
 
