@@ -74,10 +74,12 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -123,14 +125,19 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
     private Button mFavoriteButton;
     private Button mDeleteButton;
     private Button mMoveButton;
-    private Button mSearchButton;
     private Button mFolderTitle;
     private Button mAccountTitle;
+    private Button mDoneSearch;
     private View mListFooterView;
     private TextView mListFooterText;
     private View mListFooterProgress;
     private TextView mErrorBanner;
-    private EditText mSearchBox;
+    private EditText mSearchSenderBox;
+    private EditText mSearchSubjectBox;
+    private EditText mSearchMessageBox;
+    private ImageView mSearchSenderClear;
+    private ImageView mSearchSubjectClear;
+    private ImageView mSearchMessageClear;
 
     private static final int LIST_FOOTER_MODE_NONE = 0;
     private static final int LIST_FOOTER_MODE_REFRESH = 1;
@@ -192,8 +199,11 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
     private long prevMagicId;
     private boolean ranFolderListTask = false;
     public long mAccountId;
-    private String searchString = "";
+    private String searchSenderString = "";
+    private String searchSubjectString = "";
+    private String searchMessageString = "";
     private Boolean searchMode = false;
+    private Boolean accountButtonBeforeSearch = false;
 
     /* package */ static final String[] MESSAGE_PROJECTION = new String[] {
         EmailContent.RECORD_ID, MessageColumns.MAILBOX_KEY, MessageColumns.ACCOUNT_KEY,
@@ -202,6 +212,12 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         MessageColumns.FLAGS,
     };
 
+    static final String[] BODY_PROJECTION = new String[] {
+        EmailContent.RECORD_ID
+    };
+    
+    
+    
     /**
      * Open a specific mailbox.
      *
@@ -327,15 +343,27 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         mLeftTitle = (TextView) findViewById(R.id.title_left_text);
         mProgressIcon = (ProgressBar) findViewById(R.id.title_progress_icon);
         mErrorBanner = (TextView) findViewById(R.id.connection_error_text);
-        mSearchButton = (Button) findViewById(R.id.search_button);
         mFolderTitle = (Button) findViewById(R.id.title_left_text);
         mAccountTitle = (Button) findViewById(R.id.account_title_button);
-        mSearchBox = (EditText) findViewById(R.id.search_box);
+        mSearchSenderBox = (EditText) findViewById(R.id.search_box_sender);
+        mSearchSubjectBox = (EditText) findViewById(R.id.search_box_subject);
+        mSearchMessageBox = (EditText) findViewById(R.id.search_box_message);
+        
+        mSearchSenderClear = (ImageView) findViewById(R.id.sender_clear);
+        mSearchSubjectClear = (ImageView) findViewById(R.id.subject_clear);
+        mSearchMessageClear = (ImageView) findViewById(R.id.message_clear);
+        mDoneSearch = (Button) findViewById(R.id.search_done);
+        
+        mSearchSenderClear.setOnClickListener(this);
+        mSearchSubjectClear.setOnClickListener(this);
+        mSearchMessageClear.setOnClickListener(this);
+        
+        mDoneSearch.setOnClickListener(this);
+        
         mReadUnreadButton.setOnClickListener(this);
         mFavoriteButton.setOnClickListener(this);
         mDeleteButton.setOnClickListener(this);
         mMoveButton.setOnClickListener(this);
-        mSearchButton.setOnClickListener(this);
         mAccountTitle.setOnClickListener(this);
         mFolderTitle.setOnClickListener(this);
         mListView.setOnItemClickListener(this);
@@ -522,19 +550,69 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
             case R.id.title_left_text:
                 onFolders();
                 break;
-            case R.id.search_button:
-                onSearch();
+            case R.id.sender_clear:
+                mSearchSenderBox.setText("");
+                break;
+            case R.id.subject_clear:
+                mSearchSubjectBox.setText("");
+                break;
+            case R.id.message_clear:
+                mSearchMessageBox.setText("");
+                break;
+            case R.id.search_done:
+                onSearchDone();
                 break;
         }
     }
 
+    public void onSearchDone() {
+            mFolderTitle.setVisibility(View.VISIBLE);
+            if (accountButtonBeforeSearch) {
+                mAccountTitle.setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.title_right_text).setVisibility(View.VISIBLE);
+            }
+            findViewById(R.id.search_box_row).setVisibility(View.GONE);
+            mSearchSenderBox.setVisibility(View.GONE);
+            mSearchSubjectBox.setVisibility(View.GONE);
+            mSearchMessageBox.setVisibility(View.GONE);
+            mSearchSenderClear.setVisibility(View.GONE);
+            mSearchSubjectClear.setVisibility(View.GONE);
+            mSearchMessageClear.setVisibility(View.GONE);
+            mDoneSearch.setVisibility(View.GONE);
+            mSearchSenderBox.setText("");
+            mSearchSubjectBox.setText("");
+            mSearchMessageBox.setText("");
+            searchMode = false;
+
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mSearchSenderBox.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mSearchSubjectBox.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mSearchMessageBox.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(mListView.getWindowToken(), 0);
+
+            mLoadMessagesTask.cancel(true);
+            mLoadMessagesTask = new LoadMessagesTask(mMailboxId, -1);
+            mLoadMessagesTask.execute();
+
+    }
+
     public void onSearch() {
-        mSearchButton.setVisibility(View.GONE);
         mFolderTitle.setVisibility(View.GONE);
+        accountButtonBeforeSearch = (mAccountTitle.getVisibility() == View.VISIBLE);
         mAccountTitle.setVisibility(View.GONE);
-        mSearchBox.setVisibility(View.VISIBLE);
+        findViewById(R.id.title_right_text).setVisibility(View.GONE);
+        findViewById(R.id.search_box_row).setVisibility(View.VISIBLE);
+        mSearchSenderBox.setVisibility(View.VISIBLE);
+        mSearchSubjectBox.setVisibility(View.VISIBLE);
+        mSearchMessageBox.setVisibility(View.VISIBLE);
+        mSearchSenderClear.setVisibility(View.VISIBLE);
+        mSearchSubjectClear.setVisibility(View.VISIBLE);
+        mSearchMessageClear.setVisibility(View.VISIBLE);
+        mDoneSearch.setVisibility(View.VISIBLE);
+        
         searchMode = true;
-        mSearchBox.addTextChangedListener(new TextWatcher() {
+        mSearchSenderBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
@@ -548,21 +626,60 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
-                searchString = mSearchBox.getText().toString();
-                Log.d("MIKE","_____________________SEARCH STRING IS: "+searchString);
-                if (searchString.length() < 3) {
-                    return; // don't do anything until search string is long enough to be worthwhile
-                }
-                mLoadMessagesTask.cancel(true);
-                mLoadMessagesTask = new LoadMessagesTask(mMailboxId, -1);
-                mLoadMessagesTask.execute();
+                searchTask();
             }
         });
-        
-        
-        
+
+        mSearchSubjectBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                searchTask();
+            }
+        });
+        mSearchMessageBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                searchTask();
+            }
+        });
     }
 
+    private void searchTask() {
+        searchSenderString = mSearchSenderBox.getText().toString();
+        searchSubjectString = mSearchSubjectBox.getText().toString();
+        searchMessageString = mSearchMessageBox.getText().toString();
+        Log.d("MIKE","_____________________SEARCH STRING IS: "+searchSenderString);
+
+        
+        mLoadMessagesTask.cancel(true);
+        mLoadMessagesTask = new LoadMessagesTask(mMailboxId, -1);
+        mLoadMessagesTask.execute();
+
+    }
+    
+    
     public void onBackPressed() {
         if (prevMagicId < -1) {
             MessageList.actionRestoreMagicMailbox(mContext, prevMagicId);
@@ -621,6 +738,9 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
                 return true;
             case R.id.select_all:
                 onSelectAll();
+                return true;
+            case R.id.search:
+                onSearch();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1491,22 +1611,57 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
             String selection =
                 Utility.buildMailboxIdSelection(MessageList.this.mResolver, mMailboxKey, mContext);
             if (searchMode) {
-                selection += " AND " + MessageColumns.DISPLAY_NAME + " LIKE '%" + searchString + "%'";
+                selection += " AND " + MessageColumns.DISPLAY_NAME + " LIKE '%" + searchSenderString + "%'" +
+                        " AND " + MessageColumns.SUBJECT + " LIKE '%" + searchSubjectString + "%'";
             }
-            Log.d("MIKE","SELECTION IS: "+selection);
-            Cursor c;
-            if (searchMode) {
-                c = MessageList.this.managedQuery(
+            Cursor c = MessageList.this.managedQuery(
                         EmailContent.Message.CONTENT_URI, MESSAGE_PROJECTION,
                         selection, null, EmailContent.MessageColumns.TIMESTAMP + " DESC");
-            } else {
-                c = MessageList.this.managedQuery(
-                        EmailContent.Message.CONTENT_URI, MESSAGE_PROJECTION,
-                        selection, null, EmailContent.MessageColumns.TIMESTAMP + " DESC");
-            }
             if (isCancelled()) {
                 c.close();
                 c = null;
+            }
+            if (searchMode && c.moveToFirst() && (!searchMessageString.equals(""))) {
+                Long[] initResults = new Long[c.getCount()];
+                int index = 0;
+                String messageSelection = "((" + EmailContent.Body.HTML_CONTENT + " LIKE '%" + searchMessageString + "%') OR (" +
+                        EmailContent.Body.TEXT_CONTENT + " LIKE '%" + searchMessageString + "%'))";
+                messageSelection += " AND _id IN (" + c.getLong(0);
+                while (c.moveToNext()) {
+                    messageSelection += ",";
+                    initResults[index] = c.getLong(0);
+                    messageSelection += initResults[index].toString();
+                    index++;
+                }
+                messageSelection += ")";
+                c.close();
+                c = null;
+                c = MessageList.this.managedQuery(
+                        EmailContent.Body.CONTENT_URI, BODY_PROJECTION,
+                        messageSelection, null, null);
+                // now take results of second query and pull out mId's and requery message uri
+                //
+                //
+                if (c.moveToFirst()) {
+                index = 0;
+                messageSelection = "_id IN (" + c.getLong(0);
+                while (c.moveToNext()) {
+                    messageSelection += ",";
+                    initResults[index] = c.getLong(0);
+                    messageSelection += initResults[index].toString();
+                    index++;
+                }
+                messageSelection += ")";
+                c = null;
+                c = MessageList.this.managedQuery(
+                        EmailContent.Message.CONTENT_URI, MESSAGE_PROJECTION,
+                        messageSelection, null, EmailContent.MessageColumns.TIMESTAMP + " DESC");
+                } 
+                if (isCancelled()) {
+                    c.close();
+                    c = null;
+                }
+                
             }
             return c;
         }

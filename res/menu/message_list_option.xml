@@ -17,6 +17,11 @@
 <!-- This menu is shown when MessageList is viewing a regular mailbox. -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/search"
+        android:alphabeticShortcut="s"
+        android:title="@string/search_button"
+        android:icon="@drawable/ic_menu_search"
+    />
     <item android:id="@+id/refresh"
         android:alphabeticShortcut="r"
         android:title="@string/refresh_action"
