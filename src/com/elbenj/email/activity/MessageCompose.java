@@ -972,7 +972,12 @@ public class MessageCompose extends Activity implements OnClickListener, OnFocus
     }
 
     private void onSend() {
-        boolean onDelete = (0 != (mAccount.getFlags() & Account.FLAGS_CONFIRM_ON_DELETE));
+        int flags = 0;
+        try {
+            flags = mAccount.getFlags();
+        } catch (NullPointerException e) {
+        }
+        boolean onDelete = (0 != (flags & Account.FLAGS_CONFIRM_ON_SEND));
 
         if (onDelete) {
             new AlertDialog.Builder(MessageCompose.this)
