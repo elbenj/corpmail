@@ -521,7 +521,13 @@ public class MessageView extends Activity implements OnClickListener {
 
 
     private void onDelete() {
-        boolean onDelete = (0 != (mAccount.getFlags() & Account.FLAGS_CONFIRM_ON_DELETE));
+        Account thisAccount = Account.restoreAccountWithId(this, mAccountId);
+        int flags = 0;
+        try {
+            flags = thisAccount.getFlags();
+        } catch (NullPointerException e) {
+        }
+        boolean onDelete = (0 != (flags & Account.FLAGS_CONFIRM_ON_DELETE));
 
         if (onDelete) {
             new AlertDialog.Builder(MessageView.this)
