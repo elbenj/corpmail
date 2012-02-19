@@ -670,10 +670,10 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
         searchSenderString = mSearchSenderBox.getText().toString();
         searchSubjectString = mSearchSubjectBox.getText().toString();
         searchMessageString = mSearchMessageBox.getText().toString();
-        Log.d("MIKE","_____________________SEARCH STRING IS: "+searchSenderString);
-
-        
-        mLoadMessagesTask.cancel(true);
+        try {
+            mLoadMessagesTask.cancel(true);
+        } catch (NullPointerException e) {
+        }
         mLoadMessagesTask = new LoadMessagesTask(mMailboxId, -1);
         mLoadMessagesTask.execute();
 

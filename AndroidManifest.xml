@@ -17,8 +17,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     package="com.elbenj.email"
-    android:versionCode="102020"
-    android:versionName="1.2.2"
+    android:versionCode="102030"
+    android:versionName="1.2.3"
     >
     <uses-sdk android:minSdkVersion="8" />
     <original-package android:name="com.elbenj.email" />
