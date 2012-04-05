@@ -42,10 +42,7 @@ import android.content.EntityIterator;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.RemoteException;
-import android.provider.Calendar.Attendees;
-import android.provider.Calendar.Calendars;
-import android.provider.Calendar.Events;
-import android.provider.Calendar.EventsEntity;
+import com.elbenj.exchange.adapter.CalendarSyncAdapter.EventsEntity;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Base64;
@@ -150,6 +147,17 @@ public class CalendarUtilities {
     public static final int BUSY_STATUS_TENTATIVE = 1;
     public static final int BUSY_STATUS_BUSY = 2;
     public static final int BUSY_STATUS_OUT_OF_OFFICE = 3;
+    
+    public static final String CAL_AUTHORITY = "com.android.calendar";
+    public static final Uri ATT_CONTENT_URI = Uri.parse("content://" + CAL_AUTHORITY + "/attendees");
+    
+    public static final Uri EVENT_CONTENT_URI =
+            Uri.parse("content://" + CAL_AUTHORITY + "/events");
+
+    public static final Uri EVENT_DELETED_CONTENT_URI =
+            Uri.parse("content://" + CAL_AUTHORITY + "/deleted_events");
+    
+    public static final Uri CALS_CONTENT_URI = Uri.parse("content://" + CAL_AUTHORITY + "/calendars");
 
     // Return a 4-byte long from a byte array (little endian)
     static int getLong(byte[] bytes, int offset) {
@@ -1213,20 +1221,20 @@ public class CalendarUtilities {
     static public long createCalendar(EasSyncService service, Account account, Mailbox mailbox) {
         // Create a Calendar object
         ContentValues cv = new ContentValues();
-        cv.put(Calendars.DISPLAY_NAME, account.mDisplayName);
-        cv.put(Calendars._SYNC_ACCOUNT, account.mEmailAddress);
-        cv.put(Calendars._SYNC_ACCOUNT_TYPE, Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
-        cv.put(Calendars.SYNC_EVENTS, 1);
-        cv.put(Calendars.SELECTED, 1);
-        cv.put(Calendars.HIDDEN, 0);
+        cv.put("displayName", account.mDisplayName);
+        cv.put("_sync_account", account.mEmailAddress);
+        cv.put("_sync_account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
+        cv.put("sync_events", 1);
+        cv.put("selected", 1);
+        cv.put("hidden", 0);
         // Don't show attendee status if we're the organizer
-        cv.put(Calendars.ORGANIZER_CAN_RESPOND, 0);
+        cv.put("organizerCanRespond", 0);
         // Make Email account color opaque
-        cv.put(Calendars.COLOR, 0xFF000000 | account.getAccountColor());
-        cv.put(Calendars.TIMEZONE, Time.getCurrentTimezone());
-        cv.put(Calendars.ACCESS_LEVEL, Calendars.OWNER_ACCESS);
-        cv.put(Calendars.OWNER_ACCOUNT, account.mEmailAddress);
-        Uri uri = service.mContentResolver.insert(Calendars.CONTENT_URI, cv);
+        cv.put("color", 0xFF000000 | account.getAccountColor());
+        cv.put("timezone", Time.getCurrentTimezone());
+        cv.put("access_level", 700);
+        cv.put("ownerAccount", account.mEmailAddress);
+        Uri uri = service.mContentResolver.insert(CALS_CONTENT_URI, cv);
         // We save the id of the calendar into mSyncStatus
         if (uri != null) {
             String stringId = uri.getPathSegments().get(1);
@@ -1248,9 +1256,9 @@ public class CalendarUtilities {
     static public void updateCalendar(long calendarId, EasSyncService service, Account account) {
     // Update Calendar object
     ContentValues cv = new ContentValues();
-    Uri uri = ContentUris.withAppendedId(Calendars.CONTENT_URI, calendarId);
-    cv.put(Calendars.DISPLAY_NAME, account.mDisplayName);
-    cv.put(Calendars.COLOR, 0xFF000000 | account.getAccountColor());
+    Uri uri = ContentUris.withAppendedId(CALS_CONTENT_URI, calendarId);
+    cv.put("displayName", account.mDisplayName);
+    cv.put("color", 0xFF000000 | account.getAccountColor());
     service.mContentResolver.update(uri, cv, null, null);
     service.mContentResolver.notifyChange(uri, null, true);
     }
@@ -1301,15 +1309,15 @@ public class CalendarUtilities {
         int attendeeStatus;
         switch (busyStatus) {
             case BUSY_STATUS_BUSY:
-                attendeeStatus = Attendees.ATTENDEE_STATUS_ACCEPTED;
+                attendeeStatus = 1;
                 break;
             case BUSY_STATUS_TENTATIVE:
-                attendeeStatus = Attendees.ATTENDEE_STATUS_TENTATIVE;
+                attendeeStatus = 4;
                 break;
             case BUSY_STATUS_FREE:
             case BUSY_STATUS_OUT_OF_OFFICE:
             default:
-                attendeeStatus = Attendees.ATTENDEE_STATUS_NONE;
+                attendeeStatus = 0;
         }
         return attendeeStatus;
     }
@@ -1322,15 +1330,15 @@ public class CalendarUtilities {
     static public int busyStatusFromAttendeeStatus(int selfAttendeeStatus) {
         int busyStatus;
         switch (selfAttendeeStatus) {
-            case Attendees.ATTENDEE_STATUS_DECLINED:
-            case Attendees.ATTENDEE_STATUS_NONE:
-            case Attendees.ATTENDEE_STATUS_INVITED:
+            case 2:
+            case 0:
+            case 3:
                 busyStatus = BUSY_STATUS_FREE;
                 break;
-            case Attendees.ATTENDEE_STATUS_TENTATIVE:
+            case 4:
                 busyStatus = BUSY_STATUS_TENTATIVE;
                 break;
-            case Attendees.ATTENDEE_STATUS_ACCEPTED:
+            case 1:
             default:
                 busyStatus = BUSY_STATUS_BUSY;
                 break;
@@ -1344,7 +1352,7 @@ public class CalendarUtilities {
             sb = new StringBuilder();
         }
         Resources resources = context.getResources();
-        Date date = new Date(entityValues.getAsLong(Events.DTSTART));
+        Date date = new Date(entityValues.getAsLong("dtstart"));
         String dateTimeString = DateFormat.getDateTimeInstance().format(date);
         // TODO: Add more detail to message text
         // Right now, we're using.. When: Tuesday, March 5th at 2:00pm
@@ -1352,22 +1360,22 @@ public class CalendarUtilities {
         // more like... When: Tuesdays, starting March 5th from 2:00pm - 3:00pm
         // This would require code to build complex strings, and it will have to wait
         // For now, we'll just use the meeting_recurring string
-        if (!entityValues.containsKey(Events.ORIGINAL_EVENT) &&
-                entityValues.containsKey(Events.RRULE)) {
+        if (!entityValues.containsKey("originalEvent") &&
+                entityValues.containsKey("rrule")) {
             sb.append(resources.getString(R.string.meeting_recurring, dateTimeString));
         } else {
             sb.append(resources.getString(R.string.meeting_when, dateTimeString));
         }
         String location = null;
-        if (entityValues.containsKey(Events.EVENT_LOCATION)) {
-            location = entityValues.getAsString(Events.EVENT_LOCATION);
+        if (entityValues.containsKey("eventLocation")) {
+            location = entityValues.getAsString("eventLocation");
             if (!TextUtils.isEmpty(location)) {
                 sb.append("\n");
                 sb.append(resources.getString(R.string.meeting_where, location));
             }
         }
         // If there's a description for this event, append it
-        String desc = entityValues.getAsString(Events.DESCRIPTION);
+        String desc = entityValues.getAsString("description");
         if (desc != null) {
             sb.append("\n--\n");
             sb.append(desc);
@@ -1438,7 +1446,7 @@ public class CalendarUtilities {
             int messageFlag, String uid, Account account, String specifiedAttendee) {
         ContentValues entityValues = entity.getEntityValues();
         ArrayList<NamedContentValues> subValues = entity.getSubValues();
-        boolean isException = entityValues.containsKey(Events.ORIGINAL_EVENT);
+        boolean isException = entityValues.containsKey("originalEvent");
         boolean isReply = false;
 
         EmailContent.Message msg = new EmailContent.Message();
@@ -1470,8 +1478,8 @@ public class CalendarUtilities {
 
             // Check for all day event
             boolean allDayEvent = false;
-            if (entityValues.containsKey(Events.ALL_DAY)) {
-                Integer ade = entityValues.getAsInteger(Events.ALL_DAY);
+            if (entityValues.containsKey("allDay")) {
+                Integer ade = entityValues.getAsInteger("allDay");
                 allDayEvent = (ade != null) && (ade == 1);
                 if (allDayEvent) {
                     // Example: DTSTART;VALUE=DATE:20100331 (all day event)
@@ -1484,8 +1492,8 @@ public class CalendarUtilities {
             // this is an all-day event).  Recurring, for this purpose, includes exceptions to
             // recurring events
             if (!isReply && !allDayEvent &&
-                    (entityValues.containsKey(Events.RRULE) ||
-                            entityValues.containsKey(Events.ORIGINAL_EVENT))) {
+                    (entityValues.containsKey("rrule") ||
+                            entityValues.containsKey("originalEvent"))) {
                 vCalendarTimeZone = TimeZone.getDefault();
                 // Write the VTIMEZONE block to the writer
                 timeZoneToVTimezone(vCalendarTimeZone, ics);
@@ -1495,7 +1503,7 @@ public class CalendarUtilities {
 
             ics.writeTag("BEGIN", "VEVENT");
             if (uid == null) {
-                uid = entityValues.getAsString(Events._SYNC_DATA);
+                uid = entityValues.getAsString("_sync_local_id");
             }
             if (uid != null) {
                 ics.writeTag("UID", uid);
@@ -1507,7 +1515,7 @@ public class CalendarUtilities {
                 ics.writeTag("DTSTAMP", millisToEasDateTime(System.currentTimeMillis()));
             }
 
-            long startTime = entityValues.getAsLong(Events.DTSTART);
+            long startTime = entityValues.getAsLong("dtstart");
             if (startTime != 0) {
                 ics.writeTag("DTSTART" + vCalendarDateSuffix,
                         millisToEasDateTime(startTime, vCalendarTimeZone, !allDayEvent));
@@ -1516,16 +1524,16 @@ public class CalendarUtilities {
             // If this is an Exception, we send the recurrence-id, which is just the original
             // instance time
             if (isException) {
-                long originalTime = entityValues.getAsLong(Events.ORIGINAL_INSTANCE_TIME);
+                long originalTime = entityValues.getAsLong("originalInstanceTime");
                 ics.writeTag("RECURRENCE-ID" + vCalendarDateSuffix,
                         millisToEasDateTime(originalTime, vCalendarTimeZone, !allDayEvent));
             }
 
-            if (!entityValues.containsKey(Events.DURATION)) {
-                if (entityValues.containsKey(Events.DTEND)) {
+            if (!entityValues.containsKey("duration")) {
+                if (entityValues.containsKey("dtend")) {
                     ics.writeTag("DTEND" + vCalendarDateSuffix,
                             millisToEasDateTime(
-                                    entityValues.getAsLong(Events.DTEND), vCalendarTimeZone,
+                                    entityValues.getAsLong("dtend"), vCalendarTimeZone,
                                     !allDayEvent));
                 }
             } else {
@@ -1534,7 +1542,7 @@ public class CalendarUtilities {
                 long durationMillis = HOURS;
                 Duration duration = new Duration();
                 try {
-                    duration.parse(entityValues.getAsString(Events.DURATION));
+                    duration.parse(entityValues.getAsString("duration"));
                 } catch (ParseException e) {
                     // We'll use the default in this case
                 }
@@ -1544,12 +1552,12 @@ public class CalendarUtilities {
             }
 
             String location = null;
-            if (entityValues.containsKey(Events.EVENT_LOCATION)) {
-                location = entityValues.getAsString(Events.EVENT_LOCATION);
+            if (entityValues.containsKey("eventLocation")) {
+                location = entityValues.getAsString("eventLocation");
                 ics.writeTag("LOCATION", location);
             }
 
-            String sequence = entityValues.getAsString(Events._SYNC_VERSION);
+            String sequence = entityValues.getAsString("_sync_version");
             if (sequence == null) {
                 sequence = "0";
             }
@@ -1576,7 +1584,7 @@ public class CalendarUtilities {
                     break;
             }
             Resources resources = context.getResources();
-            String title = entityValues.getAsString(Events.TITLE);
+            String title = entityValues.getAsString("title");
             if (title == null) {
                 title = "";
             }
@@ -1594,7 +1602,7 @@ public class CalendarUtilities {
             StringBuilder sb = new StringBuilder();
             if (isException && !isReply) {
                 // Add the line, depending on whether this is a cancellation or update
-                Date date = new Date(entityValues.getAsLong(Events.ORIGINAL_INSTANCE_TIME));
+                Date date = new Date(entityValues.getAsLong("originalInstanceTime"));
                 String dateString = DateFormat.getDateInstance().format(date);
                 if (titleId == R.string.meeting_canceled) {
                     sb.append(resources.getString(R.string.exception_cancel, dateString));
@@ -1612,12 +1620,12 @@ public class CalendarUtilities {
             // And store the message text
             msg.mText = text;
             if (!isReply) {
-                if (entityValues.containsKey(Events.ALL_DAY)) {
-                    Integer ade = entityValues.getAsInteger(Events.ALL_DAY);
+                if (entityValues.containsKey("allDay")) {
+                    Integer ade = entityValues.getAsInteger("allDay");
                     ics.writeTag("X-MICROSOFT-CDO-ALLDAYEVENT", ade == 0 ? "FALSE" : "TRUE");
                 }
 
-                String rrule = entityValues.getAsString(Events.RRULE);
+                String rrule = entityValues.getAsString("rrule");
                 if (rrule != null) {
                     ics.writeTag("RRULE", rrule);
                 }
@@ -1633,21 +1641,21 @@ public class CalendarUtilities {
             for (NamedContentValues ncv: subValues) {
                 Uri ncvUri = ncv.uri;
                 ContentValues ncvValues = ncv.values;
-                if (ncvUri.equals(Attendees.CONTENT_URI)) {
+                if (ncvUri.equals(ATT_CONTENT_URI)) {
                     Integer relationship =
-                        ncvValues.getAsInteger(Attendees.ATTENDEE_RELATIONSHIP);
+                        ncvValues.getAsInteger("attendeeRelationship");
                     // If there's no relationship, we can't create this for EAS
                     // Similarly, we need an attendee email for each invitee
                     if (relationship != null &&
-                            ncvValues.containsKey(Attendees.ATTENDEE_EMAIL)) {
+                            ncvValues.containsKey("attendeeEmail")) {
                         // Organizer isn't among attendees in EAS
-                        if (relationship == Attendees.RELATIONSHIP_ORGANIZER) {
-                            organizerName = ncvValues.getAsString(Attendees.ATTENDEE_NAME);
-                            organizerEmail = ncvValues.getAsString(Attendees.ATTENDEE_EMAIL);
+                        if (relationship == 2) {
+                            organizerName = ncvValues.getAsString("attendeeName");
+                            organizerEmail = ncvValues.getAsString("attendeeEmail");
                             continue;
                         }
-                        String attendeeEmail = ncvValues.getAsString(Attendees.ATTENDEE_EMAIL);
-                        String attendeeName = ncvValues.getAsString(Attendees.ATTENDEE_NAME);
+                        String attendeeEmail = ncvValues.getAsString("attendeeEmail");
+                        String attendeeName = ncvValues.getAsString("attendeeName");
 
                         // This shouldn't be possible, but allow for it
                         if (attendeeEmail == null) continue;
@@ -1748,8 +1756,8 @@ public class CalendarUtilities {
         ContentResolver cr = context.getContentResolver();
         EntityIterator eventIterator =
             EventsEntity.newEntityIterator(
-                    cr.query(ContentUris.withAppendedId(Events.CONTENT_URI.buildUpon()
-                            .appendQueryParameter(android.provider.Calendar.CALLER_IS_SYNCADAPTER,
+                    cr.query(ContentUris.withAppendedId(EVENT_CONTENT_URI.buildUpon()
+                            .appendQueryParameter("caller_is_syncadapter",
                             "true").build(), eventId), null, null, null, null), cr);
         try {
             while (eventIterator.hasNext()) {

@@ -80,9 +80,6 @@ import android.os.PowerManager.WakeLock;
 import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-import android.provider.Calendar;
-import android.provider.Calendar.Calendars;
-import android.provider.Calendar.Events;
 import android.provider.ContactsContract;
 import android.util.Log;
 

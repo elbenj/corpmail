@@ -78,11 +78,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Entity;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
-import android.provider.Calendar.Attendees;
-import android.provider.Calendar.Events;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -145,6 +144,10 @@ public class EasSyncService extends AbstractSyncService {
     static public final String EAS_12_POLICY_TYPE = "MS-EAS-Provisioning-WBXML";
     static public final String EAS_2_POLICY_TYPE = "MS-WAP-Provisioning-XML";
 
+    public static final String CAL_AUTHORITY = "com.android.calendar";
+    public static final Uri ATT_CONTENT_URI = Uri.parse("content://" + CAL_AUTHORITY + "/attendees");
+    
+    
     /**
      * We start with an 8 minute timeout, and increase/decrease by 3 minutes at a time.  There's
      * no point having a timeout shorter than 5 minutes, I think; at that point, we can just let
@@ -1001,25 +1004,24 @@ public class EasSyncService extends AbstractSyncService {
         // Fill in times, location, title, and organizer
         entityValues.put("DTSTAMP",
                 CalendarUtilities.convertEmailDateTimeToCalendarDateTime(dtStamp));
-        entityValues.put(Events.DTSTART, Utility.parseEmailDateTimeToMillis(dtStart));
-        entityValues.put(Events.DTEND, Utility.parseEmailDateTimeToMillis(dtEnd));
-        entityValues.put(Events.EVENT_LOCATION, meetingInfo.get(MeetingInfo.MEETING_LOCATION));
-        entityValues.put(Events.TITLE, meetingInfo.get(MeetingInfo.MEETING_TITLE));
-        entityValues.put(Events.ORGANIZER, organizerEmail);
+        entityValues.put("dtstart", Utility.parseEmailDateTimeToMillis(dtStart));
+        entityValues.put("dtend", Utility.parseEmailDateTimeToMillis(dtEnd));
+        entityValues.put("eventLocation", meetingInfo.get(MeetingInfo.MEETING_LOCATION));
+        entityValues.put("title", meetingInfo.get(MeetingInfo.MEETING_TITLE));
+        entityValues.put("organizer", organizerEmail);
 
         // Add ourselves as an attendee, using our account email address
         ContentValues attendeeValues = new ContentValues();
-        attendeeValues.put(Attendees.ATTENDEE_RELATIONSHIP,
-                Attendees.RELATIONSHIP_ATTENDEE);
-        attendeeValues.put(Attendees.ATTENDEE_EMAIL, mAccount.mEmailAddress);
-        entity.addSubValue(Attendees.CONTENT_URI, attendeeValues);
+        attendeeValues.put("attendeeRelationship",
+                1);
+        attendeeValues.put("attendeeEmail", mAccount.mEmailAddress);
+        entity.addSubValue(ATT_CONTENT_URI, attendeeValues);
 
         // Add the organizer
         ContentValues organizerValues = new ContentValues();
-        organizerValues.put(Attendees.ATTENDEE_RELATIONSHIP,
-                Attendees.RELATIONSHIP_ORGANIZER);
-        organizerValues.put(Attendees.ATTENDEE_EMAIL, organizerEmail);
-        entity.addSubValue(Attendees.CONTENT_URI, organizerValues);
+        organizerValues.put("attendeeRelationship", 2);
+        organizerValues.put("attendeeEmail", organizerEmail);
+        entity.addSubValue(ATT_CONTENT_URI, organizerValues);
 
         // Create a message from the Entity we've built.  The message will have fields like
         // to, subject, date, and text filled in.  There will also be an "inline" attachment
