@@ -24,7 +24,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.Calendar;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -117,7 +116,7 @@ public class AccountBackupRestore {
                         toAccount.mBackupFlags |= Account.BACKUP_FLAGS_SYNC_CONTACTS;
                     }
                     boolean syncCalendar = ContentResolver.getSyncAutomatically(acct,
-                            Calendar.AUTHORITY);
+                            "com.android.calendar");
                     if (syncCalendar) {
                         toAccount.mBackupFlags |= Account.BACKUP_FLAGS_SYNC_CALENDAR;
                     }

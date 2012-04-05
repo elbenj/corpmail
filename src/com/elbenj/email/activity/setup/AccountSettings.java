@@ -44,7 +44,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.RingtonePreference;
-import android.provider.Calendar;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -362,7 +361,7 @@ public class AccountSettings extends PreferenceActivity {
             mSyncContacts.setChecked(ContentResolver
                     .getSyncAutomatically(acct, ContactsContract.AUTHORITY));
             mSyncCalendar.setChecked(ContentResolver
-                    .getSyncAutomatically(acct, Calendar.AUTHORITY));
+                    .getSyncAutomatically(acct, "com.android.calendar"));
         } else {
             PreferenceCategory serverCategory = (PreferenceCategory) findPreference(
                     PREFERENCE_SERVER_CATERGORY);
@@ -460,7 +459,7 @@ public class AccountSettings extends PreferenceActivity {
                     Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
             ContentResolver.setSyncAutomatically(acct, ContactsContract.AUTHORITY,
                     mSyncContacts.isChecked());
-            ContentResolver.setSyncAutomatically(acct, Calendar.AUTHORITY,
+            ContentResolver.setSyncAutomatically(acct, "com.android.calendar",
                     mSyncCalendar.isChecked());
 
         }

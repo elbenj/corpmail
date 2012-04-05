@@ -162,7 +162,7 @@ public class SyncManager extends Service implements Runnable {
         + " or " + MailboxColumns.SYNC_INTERVAL + "!=" + Mailbox.CHECK_INTERVAL_NEVER + ')'
         + " and " + MailboxColumns.ACCOUNT_KEY + " in (";
     private static final String ACCOUNT_KEY_IN = MailboxColumns.ACCOUNT_KEY + " in (";
-    private static final String WHERE_CALENDAR_ID = Events.CALENDAR_ID + "=?";
+    private static final String WHERE_CALENDAR_ID = "calendar_id" + "=?";
 
     // Offsets into the syncStatus data for EAS that indicate type, exit status, and change count
     // The format is S<type_char>:<exit_char>:<change_count>
@@ -180,6 +180,20 @@ public class SyncManager extends Service implements Runnable {
     public static final int PING_STATUS_UNABLE = 3;
 
     private static final int MAX_CLIENT_CONNECTION_MANAGER_SHUTDOWNS = 1;
+    
+    
+    public static final String CAL_AUTHORITY = "com.android.calendar";
+    public static final Uri CALENDARS_URI = Uri.parse("content://" + CAL_AUTHORITY + "/calendars"); 
+    public static final String CAL_ID = "_id";
+    public static final String CAL_SYNC_EVENTS = "sync_events";
+    
+    public static final Uri EVENTS_CONTENT_URI =
+            Uri.parse("content://" + CAL_AUTHORITY + "/events");
+
+    public static final Uri EVENTS_DELETED_CONTENT_URI =
+            Uri.parse("content://" + CAL_AUTHORITY + "/deleted_events");
+    
+    
 
     // We synchronize on this for all actions affecting the service and error maps
     private static final Object sSyncLock = new Object();
@@ -653,7 +667,7 @@ public class SyncManager extends Service implements Runnable {
             // If we find the Calendar (and we'd better) register it and store it in the map
             mCalendarObservers.put(account.mId, observer);
             mResolver.registerContentObserver(
-                    ContentUris.withAppendedId(Calendars.CONTENT_URI, observer.mCalendarId), false,
+                    ContentUris.withAppendedId(CALENDARS_URI, observer.mCalendarId), false,
                     observer);
         }
     }
@@ -700,8 +714,8 @@ public class SyncManager extends Service implements Runnable {
             mAccountName = account.mEmailAddress;
 
             // Find the Calendar for this account
-            Cursor c = mResolver.query(Calendars.CONTENT_URI,
-                    new String[] {Calendars._ID, Calendars.SYNC_EVENTS},
+            Cursor c = mResolver.query(CALENDARS_URI,
+                    new String[] {CAL_ID, CAL_SYNC_EVENTS},
                     CalendarSyncAdapter.CALENDAR_SELECTION,
                     new String[] {account.mEmailAddress, Email.EXCHANGE_ACCOUNT_MANAGER_TYPE},
                     null);
@@ -724,8 +738,8 @@ public class SyncManager extends Service implements Runnable {
             if (!selfChange) {
                 new Thread(new Runnable() {
                     public void run() {
-                        Cursor c = mResolver.query(Calendars.CONTENT_URI,
-                                new String[] {Calendars.SYNC_EVENTS}, Calendars._ID + "=?",
+                        Cursor c = mResolver.query(CALENDARS_URI,
+                                new String[] {CAL_SYNC_EVENTS}, CAL_ID + "=?",
                                 new String[] {Long.toString(mCalendarId)}, null);
                         if (c == null) return;
                         // Get its sync events; if it's changed, we've got work to do
@@ -763,9 +777,9 @@ public class SyncManager extends Service implements Runnable {
                                         // Delete all events in this calendar using the sync adapter
                                         // parameter so that the deletion is only local
                                         Uri eventsAsSyncAdapter =
-                                            Events.CONTENT_URI.buildUpon()
+                                            EVENTS_CONTENT_URI.buildUpon()
                                             .appendQueryParameter(
-                                                    Calendar.CALLER_IS_SYNCADAPTER, "true")
+                                                    "caller_is_syncadapter", "true")
                                                     .build();
                                         mResolver.delete(eventsAsSyncAdapter, WHERE_CALENDAR_ID,
                                                 new String[] {Long.toString(mCalendarId)});
@@ -799,6 +813,17 @@ public class SyncManager extends Service implements Runnable {
             if (!selfChange) {
                 kick("mailbox changed");
             }
+        }
+
+        static public Account getAccountById(long accountId) {
+            SyncManager syncManager = INSTANCE;
+            if (syncManager != null) {
+                AccountList accountList = syncManager.mAccountList;
+                synchronized (accountList) {
+                    return accountList.getById(accountId);
+                }
+            }
+            return null;
         }
     }
 
@@ -838,17 +863,6 @@ public class SyncManager extends Service implements Runnable {
 
     static public IEmailServiceCallback callback() {
         return sCallbackProxy;
-    }
-
-    static public Account getAccountById(long accountId) {
-        SyncManager syncManager = INSTANCE;
-        if (syncManager != null) {
-            AccountList accountList = syncManager.mAccountList;
-            synchronized (accountList) {
-                return accountList.getById(accountId);
-            }
-        }
-        return null;
     }
 
     static public String getEasAccountSelector() {
@@ -1468,7 +1482,7 @@ public class SyncManager extends Service implements Runnable {
         synchronized (mAccountList) {
             for (Account account : mAccountList) {
                 updatePIMSyncSettings(account, Mailbox.TYPE_CONTACTS, ContactsContract.AUTHORITY);
-                updatePIMSyncSettings(account, Mailbox.TYPE_CALENDAR, Calendar.AUTHORITY);
+                updatePIMSyncSettings(account, Mailbox.TYPE_CALENDAR, "com.android.calendar");
             }
         }
     }
@@ -2088,7 +2102,7 @@ public class SyncManager extends Service implements Runnable {
                             if (type == Mailbox.TYPE_CONTACTS) {
                                 authority = ContactsContract.AUTHORITY;
                             } else {
-                                authority = Calendar.AUTHORITY;
+                                authority = "com.android.calendar";
                                 if (!mCalendarObservers.containsKey(account.mId)){
                                     // Make sure we have an observer for this Calendar, as
                                     // we need to be able to detect sync state changes, sigh

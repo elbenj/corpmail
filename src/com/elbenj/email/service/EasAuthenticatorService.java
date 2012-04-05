@@ -30,7 +30,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Calendar;
 import android.provider.ContactsContract;
 
 /**
@@ -80,8 +79,8 @@ public class EasAuthenticatorService extends Service {
                         options.getBoolean(OPTIONS_CALENDAR_SYNC_ENABLED)) {
                     syncCalendar = true;
                 }
-                ContentResolver.setIsSyncable(account, Calendar.AUTHORITY, 1);
-                ContentResolver.setSyncAutomatically(account, Calendar.AUTHORITY, syncCalendar);
+                ContentResolver.setIsSyncable(account, "com.android.calendar", 1);
+                ContentResolver.setSyncAutomatically(account, "com.android.calendar", syncCalendar);
 
                 Bundle b = new Bundle();
                 b.putString(AccountManager.KEY_ACCOUNT_NAME, options.getString(OPTIONS_USERNAME));
