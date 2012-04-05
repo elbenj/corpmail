@@ -812,16 +812,6 @@ public class SyncManager extends Service implements Runnable {
             }
         }
 
-        static public Account getAccountById(long accountId) {
-            SyncManager syncManager = INSTANCE;
-            if (syncManager != null) {
-                AccountList accountList = syncManager.mAccountList;
-                synchronized (accountList) {
-                    return accountList.getById(accountId);
-                }
-            }
-            return null;
-        }
     }
 
     private class SyncedMessageObserver extends ContentObserver {
@@ -860,6 +850,17 @@ public class SyncManager extends Service implements Runnable {
 
     static public IEmailServiceCallback callback() {
         return sCallbackProxy;
+    }
+
+    static public Account getAccountById(long accountId) {
+        SyncManager syncManager = INSTANCE;
+        if (syncManager != null) {
+            AccountList accountList = syncManager.mAccountList;
+            synchronized (accountList) {
+                return accountList.getById(accountId);
+            }
+        }
+        return null;
     }
 
     static public String getEasAccountSelector() {
