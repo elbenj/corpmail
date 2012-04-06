@@ -51,6 +51,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.provider.OpenableColumns;
 import android.text.InputFilter;
 import android.text.SpannableStringBuilder;
@@ -300,6 +301,13 @@ public class MessageCompose extends Activity implements OnClickListener, OnFocus
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy threadpolicy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(threadpolicy);
+                
+        StrictMode.VmPolicy vmpolicy = new StrictMode.
+                VmPolicy.Builder().penaltyLog().build();
+                StrictMode.setVmPolicy(vmpolicy);
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.message_compose);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.list_title);

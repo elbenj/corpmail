@@ -59,6 +59,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -329,6 +330,13 @@ public class MessageList extends ListActivity implements OnItemClickListener, On
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        StrictMode.ThreadPolicy threadpolicy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(threadpolicy);
+                
+        StrictMode.VmPolicy vmpolicy = new StrictMode.
+                VmPolicy.Builder().penaltyLog().build();
+                StrictMode.setVmPolicy(vmpolicy);
         setContentView(R.layout.message_list);
         mContext = MessageList.this.getBaseContext();
         mHandler = new MessageListHandler();

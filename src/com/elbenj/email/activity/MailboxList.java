@@ -46,6 +46,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -119,6 +120,13 @@ public class MailboxList extends ListActivity implements OnItemClickListener, On
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        StrictMode.ThreadPolicy threadpolicy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(threadpolicy);
+                
+        StrictMode.VmPolicy vmpolicy = new StrictMode.
+                VmPolicy.Builder().penaltyLog().build();
+                StrictMode.setVmPolicy(vmpolicy);
         setContentView(R.layout.mailbox_list);
 
         mHandler = new MailboxListHandler();

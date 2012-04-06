@@ -52,6 +52,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -161,7 +162,13 @@ public class AccountFolderList extends ListActivity implements OnItemClickListen
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        StrictMode.ThreadPolicy threadpolicy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(threadpolicy);
+                
+        StrictMode.VmPolicy vmpolicy = new StrictMode.
+                VmPolicy.Builder().penaltyLog().build();
+                StrictMode.setVmPolicy(vmpolicy);
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.account_folder_list);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,

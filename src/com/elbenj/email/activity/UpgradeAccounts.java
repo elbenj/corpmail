@@ -44,6 +44,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,7 +108,13 @@ public class UpgradeAccounts extends ListActivity implements OnClickListener {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
+        StrictMode.ThreadPolicy threadpolicy = new StrictMode.
+                ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(threadpolicy);
+                
+        StrictMode.VmPolicy vmpolicy = new StrictMode.
+                VmPolicy.Builder().penaltyLog().build();
+                StrictMode.setVmPolicy(vmpolicy);
         Preferences p = Preferences.getPreferences(this);
         Account[] legacyAccounts = p.getAccounts();
         if (legacyAccounts.length == 0) {

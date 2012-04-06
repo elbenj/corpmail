@@ -609,15 +609,10 @@ public class Utility {
             Log.d(Email.LOG_TAG, "Error in TelephonyManager.getDeviceId(): " + e.getMessage());
             return null;
         }
-        final MessageDigest sha;
-        try {
-            sha = MessageDigest.getInstance("SHA-1");
-        } catch (Exception impossible) {
-            return null;
-        }
-        sha.update(Utility.toUtf8(deviceId));
-        final int hash = getSmallHashFromSha1(sha.digest());
-        return Integer.toString(hash);
+        
+        return null;
+        
+
     }
 
     /**

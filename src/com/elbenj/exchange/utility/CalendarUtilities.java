@@ -1222,8 +1222,8 @@ public class CalendarUtilities {
         // Create a Calendar object
         ContentValues cv = new ContentValues();
         cv.put("displayName", account.mDisplayName);
-        cv.put("_sync_account", account.mEmailAddress);
-        cv.put("_sync_account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
+        cv.put("account_name", account.mEmailAddress);
+        cv.put("account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
         cv.put("sync_events", 1);
         cv.put("selected", 1);
         cv.put("hidden", 0);

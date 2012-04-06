@@ -103,7 +103,7 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
         new String[] {"attendeeStatus"};
 
     public static final String CALENDAR_SELECTION =
-            "_sync_account" + "=? AND " + "_sync_account_type" + "=?";
+            "account_name" + "=? AND " + "account_type" + "=?";
     private static final int CALENDAR_SELECTION_ID = 0;
 
     private static final String[] EXTENDED_PROPERTY_PROJECTION =
@@ -320,9 +320,9 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
         public void wipe() {
             // Delete the calendar associated with this account
             // CalendarProvider2 does NOT handle selection arguments in deletions
-            mContentResolver.delete(CALS_CONTENT_URI, "_sync_account" +
+            mContentResolver.delete(CALS_CONTENT_URI, "account_name" +
                     "=" + DatabaseUtils.sqlEscapeString(mEmailAddress) + " AND " +
-                    "_sync_account_type" + "=" +
+                    "account_type" + "=" +
                     DatabaseUtils.sqlEscapeString(Email.EXCHANGE_ACCOUNT_MANAGER_TYPE), null);
             // Invalidate our calendar observers
             SyncManager.unregisterCalendarObservers();
@@ -420,8 +420,8 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
                 throws IOException {
             ContentValues cv = new ContentValues();
             cv.put(EVENT_CALENDAR_ID, mCalendarId);
-            cv.put("_sync_account", mEmailAddress);
-            cv.put("_sync_account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
+            cv.put("account_name", mEmailAddress);
+            cv.put("account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
             cv.put(EVENT_SYNC_ID, serverId);
             cv.put("hasAttendeeData", 1);
             cv.put("_sync_local_id", "0");
@@ -815,8 +815,8 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
                 long startTime, long endTime) throws IOException {
             ContentValues cv = new ContentValues();
             cv.put("calendar_id", mCalendarId);
-            cv.put("_sync_account", mEmailAddress);
-            cv.put("_sync_account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
+            cv.put("account_name", mEmailAddress);
+            cv.put("account_type", Email.EXCHANGE_ACCOUNT_MANAGER_TYPE);
 
             // It appears that these values have to be copied from the parent if they are to appear
             // Note that they can be overridden below
@@ -2177,13 +2177,13 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
          * The account that was used to sync the entry to the device.
          * <P>Type: TEXT</P>
          */
-        public static final String _SYNC_ACCOUNT = "_sync_account";
+        public static final String _SYNC_ACCOUNT = "account_name";
 
         /**
          * The type of the account that was used to sync the entry to the device.
          * <P>Type: TEXT</P>
          */
-        public static final String _SYNC_ACCOUNT_TYPE = "_sync_account_type";
+        public static final String _SYNC_ACCOUNT_TYPE = "account_type";
 
         /**
          * The unique ID for a row assigned by the sync source. NULL if the row has never been synced.
