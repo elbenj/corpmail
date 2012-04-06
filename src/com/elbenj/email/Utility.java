@@ -612,7 +612,7 @@ public class Utility {
         final MessageDigest sha;
         try {
             sha = MessageDigest.getInstance("SHA-1");
-        } catch (NoSuchAlgorithmException impossible) {
+        } catch (Exception impossible) {
             return null;
         }
         sha.update(Utility.toUtf8(deviceId));
