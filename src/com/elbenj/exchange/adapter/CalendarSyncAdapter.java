@@ -181,6 +181,7 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
     public CalendarSyncAdapter(Mailbox mailbox, EasSyncService service) {
         super(mailbox, service);
         mEmailAddress = mAccount.mEmailAddress;
+        Log.d("MIKE","ASDFAKLJASDKLDJFS____________");
         Cursor c = mService.mContentResolver.query(CALS_CONTENT_URI,
                 new String[] {"_id"}, CALENDAR_SELECTION,
                 new String[] {mEmailAddress, Email.EXCHANGE_ACCOUNT_MANAGER_TYPE}, null);
@@ -243,6 +244,7 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
         synchronized (sSyncKeyLock) {
             ContentProviderClient client = mService.mContentResolver
                     .acquireContentProviderClient(CAL_MAIN_CONTENT_URI);
+            Log.d("MIKE"," GET SYNC KEY________");
             try {
                 byte[] data = SyncStateContract.Helpers.get(client,
                         asSyncAdapter(SyncState.CONTENT_URI), mAccountManagerAccount);
@@ -290,6 +292,7 @@ public class CalendarSyncAdapter extends AbstractSyncAdapter {
             if ("0".equals(syncKey) || !inCommands) {
                 ContentProviderClient client = mService.mContentResolver
                         .acquireContentProviderClient(CAL_MAIN_CONTENT_URI);
+                Log.d("MIKE","ASDFASDFJJJJJJJJJJJJJJJJJJJJJJJJJ____");
                 try {
                     SyncStateContract.Helpers.set(client,
                             asSyncAdapter(SyncState.CONTENT_URI), mAccountManagerAccount,

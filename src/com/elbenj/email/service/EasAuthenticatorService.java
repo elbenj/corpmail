@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 /**
  * A very basic authenticator service for EAS.  At the moment, it has no UI hooks.  When called

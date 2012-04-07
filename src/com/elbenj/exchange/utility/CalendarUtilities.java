@@ -1234,6 +1234,7 @@ public class CalendarUtilities {
         cv.put("timezone", Time.getCurrentTimezone());
         cv.put("access_level", 700);
         cv.put("ownerAccount", account.mEmailAddress);
+        Log.d("MIKE","____WHAT___________");
         Uri uri = service.mContentResolver.insert(CALS_CONTENT_URI, cv);
         // We save the id of the calendar into mSyncStatus
         if (uri != null) {
