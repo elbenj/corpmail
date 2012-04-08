@@ -17,10 +17,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     package="com.elbenj.email"
-    android:versionCode="102030"
-    android:versionName="1.2.3"
+    android:versionCode="102040"
+    android:versionName="1.2.4"
     >
     <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:maxSdkVersion="10" />
     <original-package android:name="com.elbenj.email" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
